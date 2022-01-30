@@ -1,11 +1,10 @@
-import qs from "qs";
 import { useState, useEffect } from "react"
-import { cleanObject } from "utils";
-import List from "./list"
+import qs from "qs";
+import { cleanObject, useDebounce, useMount } from "utils";
 import { SearchPanel } from "./search-panel"
+import List from "./list"
 
 const apiURL = process.env.REACT_APP_API_URL;
-console.log(apiURL)
 
 const ProjectListScreen = () => {
 
@@ -13,23 +12,24 @@ const ProjectListScreen = () => {
 
     const [list, setList] = useState([]);
     const [users, setUsers] = useState([]);
+    const debouncedValue = useDebounce(param, 1000)
 
-    useEffect(() => {
+    useMount(() => {
         fetch(`${apiURL}/users`).then(async response => {
             if(response.ok){
                 let result = await response.json()
                 setUsers(result);
             }
         })
-    }, [param]);
+    });
 
-    useEffect(() => {
-        fetch(`${apiURL}/projects?${qs.stringify(cleanObject(param))}`).then(async response => {
+    useEffect(() => { //就是只挂载一次
+        fetch(`${apiURL}/projects?${qs.stringify(cleanObject(debouncedValue))}`).then(async response => {
             if(response.ok){
                 setList(await response.json());
             }
         })
-    },[param])
+    }, [debouncedValue])
 
     return <div>
         <SearchPanel param={param} setParam={setParam} users={users}/>
