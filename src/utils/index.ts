@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
 //排除只是0的情况
-export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
+export const isFalsy = (value: unknown): boolean =>
+  value === 0 ? false : !value;
 
 export const cleanObject = (object: object) => {
   // 不要污染传入的对象
@@ -26,7 +27,8 @@ export const useMount = (callback: () => void) => {
   }, []);
 };
 
-export const useDebounce = (value: any, delay?: number) => {
+//V 泛型
+export const useDebounce = <V>(value: V, delay?: number) => {
   //可传可不传
   const [debouncedValue, setDebouncedValue] = useState(value);
 
