@@ -1,27 +1,33 @@
 import { useEffect, useState } from "react";
-export const isFalsy = (value) => (value === 0 ? false : !value);
 
-export const cleanObject = (object) => {
+//排除只是0的情况
+export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
+
+export const cleanObject = (object: object) => {
   // 不要污染传入的对象
+  //Object.assign({}, object) 相当于
   const result = { ...object };
 
   Object.keys(result).forEach((key) => {
+    //@ts-ignore
     const value = result[key];
     if (isFalsy(value)) {
+      //@ts-ignore
       delete result[key];
     }
   });
   return result;
 };
 
-export const useMount = (callback) => {
+export const useMount = (callback: () => void) => {
   // 这个主要是为了  页面刷新就执行一次
   useEffect(() => {
     callback();
   }, []);
 };
 
-export const useDebounce = (value, delay) => {
+export const useDebounce = (value: any, delay?: number) => {
+  //可传可不传
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
