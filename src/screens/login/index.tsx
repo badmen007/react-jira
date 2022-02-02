@@ -1,23 +1,8 @@
+import { useAuth } from "context/auth-context";
 import { FormEvent } from "react";
-import { json } from "stream/consumers";
-
-const apiURL = process.env.REACT_APP_API_URL;
 
 export const LoginScreen = () => {
-  const login = (param: { username: string; password: string }) => {
-    fetch(`${apiURL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(param),
-    }).then(async (response) => {
-      if (response.ok) {
-        let result = await response.json();
-        console.log(result);
-      }
-    });
-  };
+  const { login, user } = useAuth();
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -30,6 +15,11 @@ export const LoginScreen = () => {
 
   return (
     <form onSubmit={onSubmit}>
+      {user ? (
+        <div>
+          {user.name}:{user.token}
+        </div>
+      ) : null}
       <div>
         <label htmlFor="username">用户名: </label>
         <input type="text" id={"username"} />
