@@ -21,16 +21,17 @@ export const AuthenticatedApp = () => {
             overlay={
               <Menu>
                 <Menu.Item>
-                  <a onClick={logout}>登出</a>
+                  <Button type={"link"} onClick={logout}>
+                    登出
+                  </Button>
                 </Menu.Item>
               </Menu>
             }
           >
-            <a onClick={(e) => e.preventDefault()}>
-              {" "}
+            <Button type={"link"} onClick={(e) => e.preventDefault()}>
               {/* 默认显示 */}
               Hi, {user?.name}
-            </a>
+            </Button>
           </Dropdown>
         </HeaderRight>
       </Header>
