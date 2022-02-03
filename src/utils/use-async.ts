@@ -11,7 +11,19 @@ const defaultInitialState: State<null> = {
   data: null,
   stat: "idle",
 };
-export const useAsync = <D>(initialState?: State<D>) => {
+
+const defaultConfig = {
+  throwOnError: false,
+};
+
+export const useAsync = <D>(
+  initialState?: State<D>,
+  initialConfig?: typeof defaultConfig
+) => {
+  const config = {
+    ...defaultConfig,
+    ...initialConfig,
+  };
   const [state, setState] = useState<State<D>>({
     // 这里为什么要传泛型
     ...defaultInitialState,
@@ -45,7 +57,9 @@ export const useAsync = <D>(initialState?: State<D>) => {
         return data;
       })
       .catch((error) => {
+        //catch 会消化异常  如果不主动抛出的话  那么外面就接收不到异常
         setError(error);
+        if (config.throwOnError) return Promise.reject(error);
         return error;
       });
   };
