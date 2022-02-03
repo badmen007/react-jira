@@ -1,7 +1,7 @@
 import { Table, TableProps } from "antd";
 import { IUser } from "./search-panel";
 import dayjs from "dayjs";
-interface IProject {
+export interface IProject {
   id: string;
   name: string;
   personId: string;
