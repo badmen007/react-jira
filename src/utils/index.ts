@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 //排除只是0的情况
 export const isFalsy = (value: unknown): boolean =>
@@ -49,17 +49,21 @@ export const useDebounce = <V>(value: V, delay?: number) => {
 };
 
 export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
-  const oldTitle = document.title;
+  //https://zh-hans.reactjs.org/docs/hooks-reference.html#useref
+  //useRef  在整个的生命周期中是不变化的  用来记录老的值
+  // 其实本质上就是一个对象 {current: x}
+  const oldTitle = useRef(document.title).current;
 
   useEffect(() => {
     document.title = title;
-  }, []);
+  }, [title]);
 
   useEffect(() => {
     return () => {
       if (!keepOnUnmount) {
+        //由于闭包的原因 在依赖为空的时候拿到的值永远是老的值
         document.title = oldTitle;
       }
     };
-  }, []);
+  }, [title, keepOnUnmount]);
 };

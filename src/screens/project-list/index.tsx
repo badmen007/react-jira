@@ -21,7 +21,7 @@ const ProjectListScreen = () => {
 
   const { data: users } = useUsers();
 
-  useDocumentTitle("项目列表");
+  useDocumentTitle("项目列表", false);
 
   return (
     <Container>
