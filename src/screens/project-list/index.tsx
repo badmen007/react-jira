@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { cleanObject, useDebounce, useMount } from "utils";
+import { cleanObject, useDebounce, useDocumentTitle, useMount } from "utils";
 import { SearchPanel } from "./search-panel";
 import List, { IProject } from "./list";
 import { useHttp } from "utils/http";
@@ -20,6 +20,8 @@ const ProjectListScreen = () => {
   const { isLoading, error, data: list } = useProjects(debouncedValue);
 
   const { data: users } = useUsers();
+
+  useDocumentTitle("项目列表");
 
   return (
     <Container>
