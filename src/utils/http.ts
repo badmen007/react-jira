@@ -1,5 +1,6 @@
 import * as auth from "auth-provider";
 import { useAuth } from "context/auth-context";
+import qs from "qs";
 const apiURL = process.env.REACT_APP_API_URL;
 
 interface IConfig extends RequestInit {
@@ -20,6 +21,11 @@ export const http = (
     },
     ...customConfig,
   };
+  if (config.method.toUpperCase() === "GET") {
+    endpoint += `?${qs.stringify(data)}`;
+  } else {
+    config.body = JSON.stringify(data || {});
+  }
   return window
     .fetch(`${apiURL}/${endpoint}`, config)
     .then(async (response) => {

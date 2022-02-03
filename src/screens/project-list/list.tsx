@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Table, TableProps } from "antd";
 import { IUser } from "./search-panel";
 import dayjs from "dayjs";
 interface IProject {
@@ -9,27 +9,31 @@ interface IProject {
   organization: string;
   created: number;
 }
-interface IListProps {
-  list: IProject[];
+interface IListProps extends TableProps<IProject> {
+  // 加的属性直接透传到Table上
   users: IUser[];
 }
 
-const List = ({ list, users }: IListProps) => {
+const List = ({ users, ...props }: IListProps) => {
   return (
     <Table
+      rowKey={"id"}
       pagination={false}
       columns={[
         {
           title: "名称",
           dataIndex: "name",
+          key: "name",
           sorter: (a, b) => a.name.localeCompare(b.name),
         },
         {
           title: "部门",
           dataIndex: "organization",
+          key: "organization",
         },
         {
           title: "负责人",
+          key: "id",
           render(value, project) {
             return (
               <span>
@@ -41,6 +45,7 @@ const List = ({ list, users }: IListProps) => {
         },
         {
           title: "创建时间",
+          key: "created",
           render(value, project) {
             return (
               <span>
@@ -52,7 +57,7 @@ const List = ({ list, users }: IListProps) => {
           },
         },
       ]}
-      dataSource={list}
+      {...props}
     />
   );
 };
