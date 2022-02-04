@@ -1,7 +1,6 @@
 import { Table, TableProps } from "antd";
 import { IUser } from "./search-panel";
 import dayjs from "dayjs";
-import { ProjectScreen } from "screens/project";
 import { Link } from "react-router-dom";
 export interface IProject {
   id: string;
@@ -27,7 +26,7 @@ const List = ({ users, ...props }: IListProps) => {
           key: "name",
           sorter: (a, b) => a.name.localeCompare(b.name),
           render(value, project) {
-            return <Link to={project.id}>{project.name}</Link>;
+            return <Link to={String(project.id)}>{project.name}</Link>;
           },
         },
         {

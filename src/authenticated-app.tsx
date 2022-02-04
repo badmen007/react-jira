@@ -7,6 +7,7 @@ import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Routes } from "react-router";
 import { ProjectScreen } from "screens/project";
+import { resetRoute } from "utils";
 
 //登录后的页面
 export const AuthenticatedApp = () => {
@@ -33,7 +34,11 @@ const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
-        <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
+        <SoftwareLogo
+          width={"18rem"}
+          color={"rgb(38, 132, 255)"}
+          onClick={resetRoute}
+        />
         <h2>项目</h2>
         <h2>用户</h2>
       </HeaderLeft>
