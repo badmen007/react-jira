@@ -2,7 +2,7 @@ import { useDebounce, useDocumentTitle } from "utils";
 import { SearchPanel } from "./search-panel";
 import List from "./list";
 import styled from "@emotion/styled";
-import { Typography } from "antd";
+import { Button, Typography } from "antd";
 import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
 import { useProjectsSearchParams } from "./util";
@@ -13,7 +13,12 @@ import { useProjectsSearchParams } from "./util";
 //基本类型可以放到依赖中 组件的状态可以放到依赖中 非组件状态的对象 包括数组和对象 不能放到依赖中
 const ProjectListScreen = () => {
   const [param, setParam] = useProjectsSearchParams();
-  const { isLoading, error, data: list } = useProjects(useDebounce(param, 200));
+  const {
+    isLoading,
+    error,
+    data: list,
+    retry,
+  } = useProjects(useDebounce(param, 200));
 
   const { data: users } = useUsers();
 
@@ -29,7 +34,12 @@ const ProjectListScreen = () => {
       {error ? (
         <Typography.Text type="danger">{error.message}</Typography.Text>
       ) : null}
-      <List loading={isLoading} dataSource={list || []} users={users || []} />
+      <List
+        refresh={retry}
+        loading={isLoading}
+        dataSource={list || []}
+        users={users || []}
+      />
     </Container>
   );
 };

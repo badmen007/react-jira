@@ -8,9 +8,11 @@ export const useProjects = (param?: Partial<IProject>) => {
   const client = useHttp();
 
   const { run, ...result } = useAsync<IProject[]>();
+  const fetchProjects = () =>
+    client("projects", { data: cleanObject(param || {}) });
   useEffect(() => {
     //就是只挂载一次
-    run(client("projects", { data: cleanObject(param || {}) }));
+    run(fetchProjects(), { retry: fetchProjects });
   }, [param]);
   return result;
 };

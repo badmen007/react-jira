@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useEditProject } from "utils/project";
-import { ProjectReference } from "typescript";
+import { useAsync } from "utils/use-async";
 export interface IProject {
   id: number;
   name: string;
@@ -16,11 +16,13 @@ export interface IProject {
 interface IListProps extends TableProps<IProject> {
   // 加的属性直接透传到Table上
   users: IUser[];
+  refresh: () => void;
 }
 
 const List = ({ users, ...props }: IListProps) => {
   const { mutate } = useEditProject();
-  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+  const pinProject = (id: number) => (pin: boolean) =>
+    mutate({ id, pin }).then(props.refresh);
   return (
     <Table
       rowKey={"id"}
