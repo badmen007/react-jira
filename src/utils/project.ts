@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { IProject } from "screens/project-list/list";
 import { cleanObject } from "utils";
 import { useHttp } from "./http";
@@ -8,12 +8,15 @@ export const useProjects = (param?: Partial<IProject>) => {
   const client = useHttp();
 
   const { run, ...result } = useAsync<IProject[]>();
-  const fetchProjects = () =>
-    client("projects", { data: cleanObject(param || {}) });
+  const fetchProjects = useCallback(
+    () => client("projects", { data: cleanObject(param || {}) }),
+    [client, param]
+  );
+
   useEffect(() => {
     //就是只挂载一次
     run(fetchProjects(), { retry: fetchProjects });
-  }, [param]);
+  }, [fetchProjects, param, run]);
   return result;
 };
 
