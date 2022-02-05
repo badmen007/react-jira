@@ -2,11 +2,14 @@ import { Table, TableProps } from "antd";
 import { IUser } from "./search-panel";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import { Pin } from "components/pin";
+import { useEditProject } from "utils/project";
+import { ProjectReference } from "typescript";
 export interface IProject {
   id: number;
   name: string;
   personId: number;
-  pin: string;
+  pin: boolean;
   organization: string;
   created: number;
 }
@@ -16,11 +19,26 @@ interface IListProps extends TableProps<IProject> {
 }
 
 const List = ({ users, ...props }: IListProps) => {
+  const { mutate } = useEditProject();
+  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
   return (
     <Table
       rowKey={"id"}
       pagination={false}
       columns={[
+        {
+          title: <Pin checked={true} disabled={true} />,
+          render(value, project) {
+            // return <Pin checked={true} onCheckedChange={pin => mutate({id:project.id, pin})}/>
+            /* 下面的这种写法等同于上面的这种写法 下面这种写法是柯里化的思想 */
+            return (
+              <Pin
+                checked={project.pin}
+                onCheckedChange={pinProject(project.id)}
+              />
+            );
+          },
+        },
         {
           title: "名称",
           key: "name",
