@@ -12,7 +12,7 @@ interface IdSelectProps extends IProps {
   value: Raw | null | undefined;
   onChange: (value?: number) => void;
   defaultOptionName?: string;
-  options?: { name: string; id: string }[];
+  options?: { name: string; id: number }[];
 }
 
 /**
@@ -26,7 +26,7 @@ export const IdSelect = (props: IdSelectProps) => {
   const { value, onChange, defaultOptionName, options, ...restProps } = props;
   return (
     <Select
-      value={toNumber(value)}
+      value={options?.length ? toNumber(value) : 0}
       onChange={(value) => onChange(Number(value) || undefined)}
       {...restProps}
     >
