@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useDebounce, useDocumentTitle } from "utils";
 import { SearchPanel } from "./search-panel";
 import List from "./list";
@@ -25,7 +24,7 @@ const ProjectListScreen = () => {
   useDocumentTitle("项目列表", false);
 
   //无限渲染问题 怎么去解决 why-did-you-render
-  console.log(useUrlQueryParam(["name"]));
+  // console.log(useUrlQueryParam(["name"]));
 
   return (
     <Container>
