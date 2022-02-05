@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useEditProject } from "utils/project";
-import { useAsync } from "utils/use-async";
 export interface IProject {
   id: number;
   name: string;
