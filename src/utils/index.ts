@@ -32,6 +32,7 @@ export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
     // TODO 依赖项中放入callback的话 会造成无限循环的现象
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 
