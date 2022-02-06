@@ -1,9 +1,10 @@
-import { Table, TableProps } from "antd";
+import { Dropdown, Menu, Table, TableProps } from "antd";
 import { IUser } from "./search-panel";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useEditProject } from "utils/project";
+import { ButtonNoPadding } from "components/lib";
 export interface IProject {
   id: number;
   name: string;
@@ -16,6 +17,7 @@ interface IListProps extends TableProps<IProject> {
   // 加的属性直接透传到Table上
   users: IUser[];
   refresh: () => void;
+  setProjectModalOpen: (isOpen: boolean) => void;
 }
 
 const List = ({ users, ...props }: IListProps) => {
@@ -75,6 +77,28 @@ const List = ({ users, ...props }: IListProps) => {
                   ? dayjs(project.created).format("YYYY-MM-DD")
                   : "无"}
               </span>
+            );
+          },
+        },
+        {
+          render(value, project) {
+            return (
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item key={"edit"}>
+                      <ButtonNoPadding
+                        type={"link"}
+                        onClick={() => props.setProjectModalOpen(true)}
+                      >
+                        编辑
+                      </ButtonNoPadding>
+                    </Menu.Item>
+                  </Menu>
+                }
+              >
+                <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
+              </Dropdown>
             );
           },
         },
