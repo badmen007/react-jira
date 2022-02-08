@@ -5,16 +5,15 @@ import styled from "@emotion/styled";
 import { Button, Typography } from "antd";
 import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
-import { useProjectsSearchParams } from "./util";
+import { useProjectModal, useProjectsSearchParams } from "./util";
 import { Row } from "components/lib";
 
 //js本身是弱类型的语言 很多的错误实在 runtime 的时候发现的  但是我们希望在写代码的时候就能发现错误 这就要用到ts
 //ts是强类型的js, 换句话说就是给js增加其它强类型语言那样的类型约束 但是最终ts会被编译成es5
 // const [keys] = useState<('name'|'personId')[]>(['name', 'personId']) // 居然还能这么写
 //基本类型可以放到依赖中 组件的状态可以放到依赖中 非组件状态的对象 包括数组和对象 不能放到依赖中
-const ProjectListScreen = (props: {
-  setProjectModalOpen: (isOpen: boolean) => void;
-}) => {
+const ProjectListScreen = () => {
+  const { open } = useProjectModal();
   const [param, setParam] = useProjectsSearchParams();
   const {
     isLoading,
@@ -34,9 +33,7 @@ const ProjectListScreen = (props: {
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        <Button onClick={() => props.setProjectModalOpen(true)}>
-          创建项目
-        </Button>
+        <Button onClick={() => open()}>创建项目</Button>
       </Row>
       <SearchPanel param={param} setParam={setParam} users={users || []} />
       {error ? (
@@ -47,7 +44,6 @@ const ProjectListScreen = (props: {
         loading={isLoading}
         dataSource={list || []}
         users={users || []}
-        setProjectModalOpen={props.setProjectModalOpen}
       />
     </Container>
   );

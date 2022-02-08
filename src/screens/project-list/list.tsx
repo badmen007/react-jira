@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useEditProject } from "utils/project";
 import { ButtonNoPadding } from "components/lib";
+import { useProjectModal } from "./util";
 export interface IProject {
   id: number;
   name: string;
@@ -17,11 +18,11 @@ interface IListProps extends TableProps<IProject> {
   // 加的属性直接透传到Table上
   users: IUser[];
   refresh: () => void;
-  setProjectModalOpen: (isOpen: boolean) => void;
 }
 
 const List = ({ users, ...props }: IListProps) => {
   const { mutate } = useEditProject();
+  const { open } = useProjectModal();
   const pinProject = (id: number) => (pin: boolean) =>
     mutate({ id, pin }).then(props.refresh);
   return (
@@ -87,10 +88,7 @@ const List = ({ users, ...props }: IListProps) => {
                 overlay={
                   <Menu>
                     <Menu.Item key={"edit"}>
-                      <ButtonNoPadding
-                        type={"link"}
-                        onClick={() => props.setProjectModalOpen(true)}
-                      >
+                      <ButtonNoPadding type={"link"} onClick={() => open()}>
                         编辑
                       </ButtonNoPadding>
                     </Menu.Item>
