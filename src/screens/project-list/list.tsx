@@ -17,14 +17,12 @@ export interface IProject {
 interface IListProps extends TableProps<IProject> {
   // 加的属性直接透传到Table上
   users: IUser[];
-  refresh: () => void;
 }
 
 const List = ({ users, ...props }: IListProps) => {
   const { mutate } = useEditProject();
   const { open } = useProjectModal();
-  const pinProject = (id: number) => (pin: boolean) =>
-    mutate({ id, pin }).then(props.refresh);
+  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
   return (
     <Table
       rowKey={"id"}

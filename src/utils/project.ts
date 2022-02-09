@@ -1,23 +1,14 @@
-import { useCallback, useEffect } from "react";
+import { useQuery } from "react-query";
 import { IProject } from "screens/project-list/list";
-import { cleanObject } from "utils";
 import { useHttp } from "./http";
 import { useAsync } from "./use-async";
 
 export const useProjects = (param?: Partial<IProject>) => {
   const client = useHttp();
 
-  const { run, ...result } = useAsync<IProject[]>();
-  const fetchProjects = useCallback(
-    () => client("projects", { data: cleanObject(param || {}) }),
-    [client, param]
+  return useQuery<IProject[]>(["projects", param], () =>
+    client("projects", { data: param })
   );
-
-  useEffect(() => {
-    //就是只挂载一次
-    run(fetchProjects(), { retry: fetchProjects });
-  }, [fetchProjects, param, run]);
-  return result;
 };
 
 export const useEditProject = () => {

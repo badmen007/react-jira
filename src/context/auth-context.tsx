@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import * as auth from "auth-provider";
 import { IUser } from "screens/project-list/search-panel";
 import { http } from "utils/http";
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   if (isError) {
-    return <FullPageErrorFallback eror={error} />;
+    return <FullPageErrorFallback error={error} />;
   }
 
   return (

@@ -2,11 +2,11 @@ import { useDebounce, useDocumentTitle } from "utils";
 import { SearchPanel } from "./search-panel";
 import List from "./list";
 import styled from "@emotion/styled";
-import { Button, Typography } from "antd";
+import { Button } from "antd";
 import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
 import { useProjectModal, useProjectsSearchParams } from "./util";
-import { Row } from "components/lib";
+import { ErrorBox, Row } from "components/lib";
 
 //js本身是弱类型的语言 很多的错误实在 runtime 的时候发现的  但是我们希望在写代码的时候就能发现错误 这就要用到ts
 //ts是强类型的js, 换句话说就是给js增加其它强类型语言那样的类型约束 但是最终ts会被编译成es5
@@ -15,12 +15,7 @@ import { Row } from "components/lib";
 const ProjectListScreen = () => {
   const { open } = useProjectModal();
   const [param, setParam] = useProjectsSearchParams();
-  const {
-    isLoading,
-    error,
-    data: list,
-    retry,
-  } = useProjects(useDebounce(param, 200));
+  const { isLoading, error, data: list } = useProjects(useDebounce(param, 200));
 
   const { data: users } = useUsers();
 
@@ -36,15 +31,8 @@ const ProjectListScreen = () => {
         <Button onClick={() => open()}>创建项目</Button>
       </Row>
       <SearchPanel param={param} setParam={setParam} users={users || []} />
-      {error ? (
-        <Typography.Text type="danger">{error.message}</Typography.Text>
-      ) : null}
-      <List
-        refresh={retry}
-        loading={isLoading}
-        dataSource={list || []}
-        users={users || []}
-      />
+      <ErrorBox error={error} />
+      <List loading={isLoading} dataSource={list || []} users={users || []} />
     </Container>
   );
 };

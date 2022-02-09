@@ -1,24 +1,24 @@
 import React from "react";
 
-type IFullbackRender = (props: { eror: Error | null }) => React.ReactElement;
+type IFullbackRender = (props: { error: Error | null }) => React.ReactElement;
 
 //错误边界处理
 //https://github.com/bvaughn/react-error-boundary
 export class ErrorBoundary extends React.Component<
   React.PropsWithChildren<{ fallbackRender: IFullbackRender }>,
-  { eror: Error | null }
+  { error: Error | null }
 > {
-  state = { eror: null };
+  state = { error: null };
 
-  static getDerivedStateFromError(eror: Error) {
-    return { eror }; // 返回的error 将赋值给state
+  static getDerivedStateFromError(error: Error) {
+    return { error }; // 返回的error 将赋值给state
   }
 
   render() {
-    const { eror } = this.state;
+    const { error } = this.state;
     const { fallbackRender, children } = this.props;
-    if (eror) {
-      return fallbackRender({ eror });
+    if (error) {
+      return fallbackRender({ error });
     }
     return children;
   }
