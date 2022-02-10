@@ -1,10 +1,12 @@
+import { SearchPanel } from "./../screens/project-list/search-panel";
 import { useMemo } from "react";
 import { URLSearchParamsInit, useSearchParams } from "react-router-dom";
 import { cleanObject } from "utils";
 
 export const useUrlQueryParam = <K extends string>(keys: K[]) => {
   //URLSearchParams
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const setSearchParams = useSetUrlSearchParam();
   return [
     useMemo(
       () =>
@@ -16,13 +18,20 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
     ),
     (params: Partial<{ [key in K]: unknown }>) => {
       //iterator  可以用for..of 进行遍历
-      const o = cleanObject({
-        ...Object.fromEntries(searchParams),
-        ...params,
-      }) as URLSearchParamsInit;
-      return setSearchParams(o);
+      return setSearchParams(params);
     },
   ] as const;
+};
+
+export const useSetUrlSearchParam = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  return (params: { [key in string]: unknown }) => {
+    const o = cleanObject({
+      ...Object.fromEntries(searchParams),
+      ...params,
+    }) as URLSearchParamsInit;
+    return setSearchParams(o);
+  };
 };
 
 //怎么让不同的变量拥有同一个类型

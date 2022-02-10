@@ -9,8 +9,8 @@ type IProps = Omit<
 
 // 当你的类型和要继承的类型有相同的键的时候 会出现类型的错误 所以要用Omit将重合的属性删除
 interface IdSelectProps extends IProps {
-  value: Raw | null | undefined;
-  onChange: (value?: number) => void;
+  value?: Raw | null | undefined;
+  onChange?: (value?: number) => void;
   defaultOptionName?: string;
   options?: { name: string; id: number }[];
 }
@@ -27,7 +27,7 @@ export const IdSelect = (props: IdSelectProps) => {
   return (
     <Select
       value={options?.length ? toNumber(value) : 0}
-      onChange={(value) => onChange(Number(value) || undefined)}
+      onChange={(value) => onChange?.(Number(value) || undefined)}
       {...restProps}
     >
       {defaultOptionName ? (
