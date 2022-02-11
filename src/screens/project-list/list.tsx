@@ -21,7 +21,7 @@ interface IListProps extends TableProps<IProject> {
 
 const List = ({ users, ...props }: IListProps) => {
   const { mutate } = useEditProject();
-  const { open, startEdit } = useProjectModal();
+  const { startEdit } = useProjectModal();
   const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
   const editProject = (id: number) => () => startEdit(id);
   return (

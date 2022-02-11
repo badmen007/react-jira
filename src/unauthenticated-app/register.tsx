@@ -51,7 +51,7 @@ export const RegisterScreen = ({
         <Input type="text" id={"cpassword"} placeholder={"密码"} />
       </Form.Item>
       <Form.Item>
-        <LongButton loading={isLoading} type="primary">
+        <LongButton loading={isLoading} type="primary" htmlType={"submit"}>
           注册
         </LongButton>
       </Form.Item>
