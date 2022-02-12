@@ -2,7 +2,6 @@ import { Button, Input } from "antd";
 import { Row } from "components/lib";
 import { TaskTypeSelect } from "components/task-type-select";
 import { UserSelect } from "components/use-select";
-import React from "react";
 import { useSetUrlSearchParam } from "utils/url";
 import { useTasksSearchParams } from "./util";
 
