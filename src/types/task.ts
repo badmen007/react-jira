@@ -1,4 +1,4 @@
-export interface ITask {
+export interface Task {
   id: number;
   name: string;
   // 经办人
