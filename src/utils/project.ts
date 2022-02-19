@@ -1,6 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { IProject } from "screens/project-list/list";
 import { useHttp } from "./http";
+import {
+  useAddConfig,
+  useDeleteConfig,
+  useEditConfig,
+} from "./use-optimistic-options";
 
 export const useProjects = (param?: Partial<IProject>) => {
   const client = useHttp();
@@ -10,24 +15,20 @@ export const useProjects = (param?: Partial<IProject>) => {
   );
 };
 
-export const useEditProject = () => {
+export const useEditProject = (queryKey: QueryKey) => {
   const client = useHttp();
-  const queryClient = useQueryClient();
   return useMutation(
     (params: Partial<IProject>) =>
       client(`projects/${params.id}`, {
         method: "PATCH",
         data: params,
       }),
-    {
-      onSuccess: () => queryClient.invalidateQueries("projects"), // 对列表进行更新 的配置项
-    }
+    useEditConfig(queryKey)
   );
 };
 
-export const useAddProject = () => {
+export const useAddProject = (queryKey: QueryKey) => {
   const client = useHttp();
-  const queryClient = useQueryClient();
 
   return useMutation(
     (params: Partial<IProject>) =>
@@ -35,10 +36,19 @@ export const useAddProject = () => {
         method: "POST",
         data: params,
       }),
-    {
-      // Invalidate and refetch
-      onSuccess: () => queryClient.invalidateQueries("projects"),
-    }
+    useAddConfig(queryKey)
+  );
+};
+
+export const useDeleteProject = (queryKey: QueryKey) => {
+  const client = useHttp();
+
+  return useMutation(
+    ({ id }: { id: number }) =>
+      client(`projects/${id}`, {
+        method: "DELETE",
+      }),
+    useDeleteConfig(queryKey)
   );
 };
 
@@ -48,7 +58,7 @@ export const useProject = (id?: number) => {
     ["project", { id }],
     () => client(`projects/${id}`),
     {
-      enabled: !!id, // 就是当id不是undefined的时候才去请求
+      enabled: Boolean(id),
     }
   );
 };

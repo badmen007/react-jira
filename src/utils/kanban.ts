@@ -2,7 +2,7 @@ import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { IKanban } from "types/kanban";
 import { Task } from "types/task";
 import { useHttp } from "./http";
-import { useAddConfig } from "./use-optimistic-options";
+import { useAddConfig, useDeleteConfig } from "./use-optimistic-options";
 
 export const useKanbans = (param?: Partial<IKanban>) => {
   const client = useHttp();
@@ -22,6 +22,18 @@ export const useAddKanban = (queryKey: QueryKey) => {
         data: params,
       }),
     useAddConfig(queryKey)
+  );
+};
+
+export const useDeleteKanban = (queryKey: QueryKey) => {
+  const client = useHttp();
+
+  return useMutation(
+    ({ id }: { id: number }) =>
+      client(`kanbans/${id}`, {
+        method: "DELETE",
+      }),
+    useDeleteConfig(queryKey)
   );
 };
 
